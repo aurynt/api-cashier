@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model detailPenjualan {
+  id          String    @id @default(cuid())
+  penjualanId String
+  perodukId   String
+  jumlah      Int
+  subtotal    Decimal   @db.Decimal(10, 2)
+  penjualan   penjualan @relation(fields: [penjualanId], references: [id])
+  produk      produk[]
+
+  @@index([penjualanId], map: "detailPenjualan_penjualanId_fkey")
+}
+
+model pelanggan {
+  id        String      @id @default(cuid())
+  nama      String
+  alamat    String      @db.Text
+  telp      String      @db.VarChar(15)
+  penjualan penjualan[]
+}
+
+model penjualan {
+  id              String            @id @default(cuid())
+  tanggal         DateTime          @db.Date
+  total           Decimal           @db.Decimal(10, 2)
+  pelangganId     String
+  detailPenjualan detailPenjualan[]
+  pelanggan       pelanggan         @relation(fields: [pelangganId], references: [id])
+
+  @@index([pelangganId], map: "penjualan_pelangganId_fkey")
+}
+
+model produk {
+  id                String           @id @default(cuid())
+  nama              String           @unique
+  harga             Decimal          @db.Decimal(10, 2)
+  stok              Int
+  detailPenjualanId String?
+  detailPenjualan   detailPenjualan? @relation(fields: [detailPenjualanId], references: [id])
+
+  @@index([detailPenjualanId], map: "produk_detailPenjualanId_fkey")
+}
+
+model user {
+  id       String @id @default(cuid())
+  name     String
+  username String @unique
+  password String
+}
