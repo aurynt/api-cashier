@@ -53,5 +53,6 @@ model user {
   id       String @id @default(cuid())
   name     String
   username String @unique
-  password String
+  hash     String
+  salt     String
 }
