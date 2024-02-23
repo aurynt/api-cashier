@@ -9,12 +9,12 @@ datasource db {
 
 model detailPenjualan {
   id          String    @id @default(cuid())
-  penjualanId String
-  perodukId   String
   jumlah      Int
-  subtotal    Decimal   @db.Decimal(10, 2)
+  subTotal    Decimal   @db.Decimal(10, 2)
+  produkId    String    @unique
+  penjualanId String
   penjualan   penjualan @relation(fields: [penjualanId], references: [id])
-  produk      produk[]
+  produk      produk    @relation(fields: [produkId], references: [id])
 
   @@index([penjualanId], map: "detailPenjualan_penjualanId_fkey")
 }
@@ -29,7 +29,7 @@ model pelanggan {
 
 model penjualan {
   id              String            @id @default(cuid())
-  tanggal         DateTime          @db.DateTime()
+  tanggal         DateTime          @db.Timestamp(0)
   total           Decimal           @db.Decimal(10, 2)
   pelangganId     String
   detailPenjualan detailPenjualan[]
@@ -39,14 +39,11 @@ model penjualan {
 }
 
 model produk {
-  id                String           @id @default(cuid())
-  nama              String           @unique
-  harga             Decimal          @db.Decimal(10, 2)
-  stok              Int
-  detailPenjualanId String?
-  detailPenjualan   detailPenjualan? @relation(fields: [detailPenjualanId], references: [id])
-
-  @@index([detailPenjualanId], map: "produk_detailPenjualanId_fkey")
+  id              String           @id @default(cuid())
+  nama            String           @unique
+  harga           Decimal          @db.Decimal(10, 2)
+  stok            Int
+  detailPenjualan detailPenjualan?
 }
 
 model user {
@@ -55,4 +52,11 @@ model user {
   username String @unique
   hash     String
   salt     String
+  role     Role
+}
+
+enum Role {
+  Kasir
+  Petugas
+  Administrator
 }

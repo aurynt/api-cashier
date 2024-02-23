@@ -4,6 +4,19 @@ export type Item = {
   stok: number;
 };
 
+export type DetailPenjualan = {
+  produkId: string;
+  penjualanId: string;
+  subTotal: Decimal;
+  jumlah: number;
+};
+
+export type Customer = {
+  nama: string;
+  alamat: string;
+  telp: string;
+};
+
 export type Sale = {
   total: Decimal;
   pelangganId: string;
