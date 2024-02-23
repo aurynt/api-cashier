@@ -30,7 +30,11 @@ export async function update(data: DetailPenjualan, id: string) {
 
 export async function all() {
   try {
-    const res = await prisma.detailPenjualan.findMany();
+    const res = await prisma.detailPenjualan.findMany({
+      include:{
+        produk:true
+      }
+    });
     return res;
   } catch (error) {
     return error;
@@ -50,6 +54,9 @@ export async function find(id: string) {
   try {
     const res = await prisma.detailPenjualan.findUnique({
       where: { id: id },
+      include:{
+        produk:true
+      }
     });
     return res;
   } catch (error) {

@@ -25,4 +25,5 @@ export type Sale = {
 export type User<T = {}> = {
   name: string;
   username: string;
+  role: "Kasir" | "Petugas" | "Administrator";
 } & T;

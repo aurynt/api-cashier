@@ -1,9 +1,7 @@
 import { prisma } from "../config/Prisma";
 import type { Customer } from "../type";
 
-export async function create(
-  data: Customer
-) {
+export async function create(data: Customer) {
   try {
     const res = await prisma.pelanggan.create({
       data: data,
@@ -30,7 +28,18 @@ export async function update(data: Customer, id: string) {
 
 export async function all() {
   try {
-    const res = await prisma.pelanggan.findMany();
+    const res = await prisma.pelanggan.findMany({
+      include: {
+        penjualan: {
+          include: {
+            _count: true,
+            detailPenjualan: { include: { produk: true } },
+            pelanggan: true,
+          },
+        },
+        _count: true,
+      },
+    });
     return res;
   } catch (error) {
     return error;
@@ -50,6 +59,16 @@ export async function find(id: string) {
   try {
     const res = await prisma.pelanggan.findUnique({
       where: { id: id },
+      include: {
+        penjualan: {
+          include: {
+            _count: true,
+            detailPenjualan: { include: { produk: true } },
+            pelanggan: true,
+          },
+        },
+        _count: true,
+      },
     });
     return res;
   } catch (error) {

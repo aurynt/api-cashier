@@ -14,7 +14,8 @@ export const DPValidation=z.object({
 export const usersValidation=z.object({
     name:z.string(),
     username:z.string(),
-    password:z.string()
+    password:z.string(),
+    role:z.enum(["Kasir" , "Petugas" , "Administrator"])
 })
 export const customerValidation=z.object({
     nama:z.string(),

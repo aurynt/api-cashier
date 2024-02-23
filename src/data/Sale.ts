@@ -29,7 +29,17 @@ export async function update(data: Sale, id: string) {
 
 export async function all() {
   try {
-    const res = await prisma.penjualan.findMany();
+    const res = await prisma.penjualan.findMany({
+      include: {
+        _count: true,
+        detailPenjualan: {
+          include: {
+            produk: true,
+          },
+        },
+        pelanggan: true,
+      },
+    });
     return res;
   } catch (error) {
     return error;
@@ -47,7 +57,18 @@ export async function remove(id: string) {
 
 export async function find(id: string) {
   try {
-    const res = await prisma.penjualan.findUnique({ where: { id: id } });
+    const res = await prisma.penjualan.findUnique({
+      where: { id: id },
+      include: {
+        _count: true,
+        detailPenjualan: {
+          include: {
+            produk: true,
+          },
+        },
+        pelanggan: true,
+      },
+    });
     return res;
   } catch (error) {
     return error;
