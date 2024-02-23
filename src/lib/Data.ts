@@ -1,20 +1,13 @@
 import { User } from "@/type";
 import { usersValidation } from "./Validation";
-import { pbkdf2Sync, randomBytes } from "crypto";
+import { hashPassword } from "./Password";
 
 export const rewriteUser = (data: User<{ password?: string }>) => {
   try {
     usersValidation.parse(data);
-    const salt = randomBytes(64).toString("base64");
-    const hash = pbkdf2Sync(
-      data.password!,
-      salt,
-      100000,
-      64,
-      "sha512"
-    ).toString("base64");
+    const res = hashPassword(data.password!);
     delete data.password;
-    return { ...data, hash, salt }
+    return { ...data, ...res };
   } catch (error) {
     throw error;
   }

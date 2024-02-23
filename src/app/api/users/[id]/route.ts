@@ -3,6 +3,7 @@ import { verifyPassword } from "@/lib/Password";
 import { usersValidation } from "@/lib/Validation";
 import { User } from "@/type";
 import { NextRequest, NextResponse } from "next/server";
+import { ZodError } from "zod";
 
 export async function GET(
   req: NextRequest,
@@ -28,9 +29,12 @@ export async function PATCH(
       const result = await update(data, params.id);
       return NextResponse.json({ result });
     }
-    throw new Error('Password not match')
-  } catch (error) {
-    return NextResponse.json({ error }, { status: 400 });
+    throw new ZodError([{message:'Not match',path:['password'],code:'custom'}]);
+  } catch (err) {
+    if (err instanceof ZodError) {
+      return NextResponse.json({ error: err.issues }, { status: 400 });
+    }
+    return NextResponse.json({ err }, { status: 400 });
   }
 }
 
