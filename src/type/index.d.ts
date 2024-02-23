@@ -4,6 +4,11 @@ export type Item = {
   stok: number;
 };
 
+export type Sale = {
+  total: Decimal;
+  pelangganId: string;
+};
+
 export type User<T = {}> = {
   name: string;
   username: string;

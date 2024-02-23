@@ -29,7 +29,7 @@ model pelanggan {
 
 model penjualan {
   id              String            @id @default(cuid())
-  tanggal         DateTime          @db.Date
+  tanggal         DateTime          @db.DateTime()
   total           Decimal           @db.Decimal(10, 2)
   pelangganId     String
   detailPenjualan detailPenjualan[]

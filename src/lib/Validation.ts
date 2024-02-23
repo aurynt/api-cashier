@@ -10,3 +10,7 @@ export const usersValidation=z.object({
     username:z.string(),
     password:z.string()
 })
+export const saleValidation=z.object({
+    total:z.number(),
+    pelangganId:z.string()
+})
