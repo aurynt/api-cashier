@@ -3,8 +3,9 @@ import type { Sale } from "../type";
 import { DateTime } from "luxon";
 export async function create(data: Sale) {
   try {
+    const tanggal = DateTime.now().setZone("Asia/Jakarta").toString();
     const res = await prisma.penjualan.create({
-      data: { tanggal: DateTime.local().toISO(), ...data },
+      data: { tanggal: tanggal, ...data },
     });
     return res;
   } catch (error) {
